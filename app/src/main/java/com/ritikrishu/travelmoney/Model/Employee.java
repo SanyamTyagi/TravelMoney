@@ -36,7 +36,7 @@ public class Employee {
     public String getFormattedCheckOutTime(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(this.getCheckOutTime()));
-        return calendar.get(Calendar.HOUR_OF_DAY) + " h " + calendar.get(Calendar.MINUTE) + " m";
+        return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
     }
 
     public void setCheckOutTime(long checkOutTime) {
@@ -50,7 +50,7 @@ public class Employee {
     public String getFormattedCheckInTime(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(this.getCheckInTime()));
-        return calendar.get(Calendar.HOUR_OF_DAY) + " h " + calendar.get(Calendar.MINUTE) + " m";
+        return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
     }
 
     public void setCheckInTime(long checkInTime) {

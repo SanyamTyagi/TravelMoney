@@ -3,6 +3,7 @@ package com.ritikrishu.travelmoney.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         mGenerateButton = (TextView) findViewById(R.id.generateButton);
         EmployeeDataBase.EmployeeDataFill();
         listAdapter = new HomeListAdapter(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +70,7 @@ public class HomeActivity extends AppCompatActivity {
     private void onCheckOut(Employee employee){
         employee.setCheckedIn(false);
         employee.setCheckOutTime(Calendar.getInstance().getTimeInMillis());
+        employee.setRemainingBalance((int)calculateBalance(employee));
         EmployeeDataBase.travelersList.add(employee);
     }
 
@@ -77,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
     //in peso
     private double calculateBalance(Employee employee){
-        return distanceTravelled(employee) * 10;
+        return employee.getRemainingBalance() - distanceTravelled(employee) * 10;
     }
 
 
