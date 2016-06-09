@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.scan_button)
+    @OnClick(R.id.scanButton)
     void scanQRCode(View v) {
         IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
         integrator.addExtra("SCAN_CAMERA_ID", getFrontCameraId());
