@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:padding="10dp"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/employee_name"
+        android:gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.25"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-condensed"
+        tools:text="Ritik Rishu"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkInTime"
+        tools:text="02:30 pm"
+        android:gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.25"
+        android:textSize="15sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkOutTime"
+        tools:text="02:30 pm"
+        android:gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.25"
+        android:textSize="15sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/balance"
+        tools:text="100"
+        android:gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.25"
+        android:textSize="15sp"/>
+</LinearLayout>

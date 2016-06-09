@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Travel Money</string>
+    <string name="scan">Scan</string>
+    <string name="generate_sheet">Generate Sheet</string>
 </resources>
