@@ -46,7 +46,7 @@ public class SheetListAdapter extends RecyclerView.Adapter<SheetListAdapter.Data
         holder.employeeName.setText(employee.getName());
         holder.checkInTime.setText(employee.getFormattedCheckInTime());
         holder.checkOutTime.setText(employee.getFormattedCheckOutTime());
-        holder.remainingBalance.setText(employee.getRemainingBalance() + " peso");
+        holder.remainingBalance.setText(employee.getFormattedRemainingBalance() + " peso");
     }
 
     @Override
