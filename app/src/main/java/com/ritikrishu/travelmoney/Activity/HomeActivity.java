@@ -2,8 +2,8 @@ package com.ritikrishu.travelmoney.Activity;
 
 import android.content.Intent;
 import android.hardware.Camera;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,16 +14,12 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.ritikrishu.travelmoney.Adapters.HomeListAdapter;
-import com.ritikrishu.travelmoney.CaptureQr;
+import com.ritikrishu.travelmoney.ContinuousCaptureActivity;
 import com.ritikrishu.travelmoney.Model.Employee;
 import com.ritikrishu.travelmoney.Model.EmployeeDataBase;
 import com.ritikrishu.travelmoney.R;
 
 import java.util.Calendar;
-import java.util.Random;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mRecyclerView = (RecyclerView) findViewById(R.id.Home_RecyclerView);
-        mScanButton = (TextView)findViewById(R.id.scanButton);
+        mScanButton = (TextView) findViewById(R.id.scanButton);
         mGenerateButton = (TextView) findViewById(R.id.generateButton);
         EmployeeDataBase.EmployeeDataFill();
         listAdapter = new HomeListAdapter(this);
@@ -48,8 +44,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                scanQRCode();
-
+//                scanQRCode();
+                startActivity(new Intent(HomeActivity.this, ContinuousCaptureActivity.class));
 
             }
         });
@@ -63,29 +59,26 @@ public class HomeActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(listAdapter);
     }
 
-    private void onCheckIn(Employee employee){
+    private void onCheckIn(Employee employee) {
         employee.setCheckedIn(true);
         employee.setCheckInTime(Calendar.getInstance().getTimeInMillis());
     }
 
-    private void onCheckOut(Employee employee){
+    private void onCheckOut(Employee employee) {
         employee.setCheckedIn(false);
         employee.setCheckOutTime(Calendar.getInstance().getTimeInMillis());
-        employee.setRemainingBalance((int)calculateBalance(employee));
+        employee.setRemainingBalance((int) calculateBalance(employee));
         EmployeeDataBase.travelersList.add(employee);
     }
 
-    private double distanceTravelled(Employee employee){
-        return ((employee.getCheckOutTime()-employee.getCheckInTime())/3600000) * 60;
+    private double distanceTravelled(Employee employee) {
+        return ((employee.getCheckOutTime() - employee.getCheckInTime()) / 3600000) * 60;
     }
 
     //in peso
-    private double calculateBalance(Employee employee){
+    private double calculateBalance(Employee employee) {
         return employee.getRemainingBalance() - distanceTravelled(employee) * 10;
     }
-
-
-
 
 
     void scanQRCode() {
@@ -94,7 +87,8 @@ public class HomeActivity extends AppCompatActivity {
         integrator.setBeepEnabled(true);
         integrator.addExtra("PROMPT_MESSAGE", "Place Your QR Inside The Box.");
         integrator.setOrientationLocked(true);
-        integrator.setCaptureActivity(CaptureQr.class);
+
+        // integrator.setCaptureActivity(CaptureQr.class);
         integrator.initiateScan();
     }
 
@@ -122,13 +116,13 @@ public class HomeActivity extends AppCompatActivity {
             } else {
                 int id = Integer.parseInt(result.getContents());
                 Employee employee = null;
-                for(Employee employee1 : EmployeeDataBase.employeesList){
-                    if(employee1.getEmployeeID() == id){
+                for (Employee employee1 : EmployeeDataBase.employeesList) {
+                    if (employee1.getEmployeeID() == id) {
                         employee = employee1;
                         break;
                     }
                 }
-                if(employee != null) {
+                if (employee != null) {
                     if (employee.isCheckedIn()) {
                         onCheckOut(employee);
                         listAdapter.addData(employee);
