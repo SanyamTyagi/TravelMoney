@@ -1,5 +1,6 @@
 package com.ritikrishu.travelmoney.Model;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,13 +9,13 @@ import java.util.Date;
  */
 public class Employee {
     private String name;
-    private int EmployeeID;
-    private int RemainingBalance;
+    private String EmployeeID;
+    private double RemainingBalance;
     private long checkInTime;
     private long checkOutTime;
     private boolean checkedIn;
 
-    public Employee(String name, int employeeID, int remainingBalance, boolean checkedIn) {
+    public Employee(String name, String employeeID, double remainingBalance, boolean checkedIn) {
         this.name = name;
         EmployeeID = employeeID;
         RemainingBalance = remainingBalance;
@@ -33,7 +34,7 @@ public class Employee {
         return checkOutTime;
     }
 
-    public String getFormattedCheckOutTime(){
+    public String getFormattedCheckOutTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(this.getCheckOutTime()));
         return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
@@ -47,7 +48,7 @@ public class Employee {
         return checkInTime;
     }
 
-    public String getFormattedCheckInTime(){
+    public String getFormattedCheckInTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(this.getCheckInTime()));
         return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
@@ -67,19 +68,24 @@ public class Employee {
     }
 
 
-    public int getEmployeeID() {
+    public String getEmployeeID() {
         return EmployeeID;
     }
 
-    public void setEmployeeID(int employeeID) {
+    public void setEmployeeID(String employeeID) {
         EmployeeID = employeeID;
     }
 
-    public int getRemainingBalance() {
+    public double getRemainingBalance() {
         return RemainingBalance;
     }
 
-    public void setRemainingBalance(int remainingBalance) {
+    public String getFormattedRemainingBalance(){
+        DecimalFormat f = new DecimalFormat("##.##");
+        return f.format(this.getRemainingBalance());
+    }
+
+    public void setRemainingBalance(double remainingBalance) {
         RemainingBalance = remainingBalance;
     }
 }
