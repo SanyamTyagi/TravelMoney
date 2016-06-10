@@ -21,19 +21,20 @@
         android:id="@+id/employee_name"
         android:gravity="center_vertical"
         android:layout_marginTop="30dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.35"
         android:textSize="15sp"
         android:fontFamily="sans-serif-condensed"
         android:text="Name"
+        android:maxWidth="20dp"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkInTime"
         android:text="Check In"
-        android:gravity="center_vertical"
+        android:gravity="right"
         android:layout_marginTop="30dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:fontFamily="sans-serif-condensed"
         android:textSize="15sp"/>
     <TextView
@@ -41,9 +42,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/checkOutTime"
         android:text="Check Out"
-        android:gravity="center_vertical"
+        android:gravity="right"
         android:layout_marginTop="30dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:fontFamily="sans-serif-condensed"
         android:textSize="15sp"/>
     <TextView
@@ -51,9 +52,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/balance"
         android:text="Balance Remaining"
-        android:gravity="center_vertical"
+        android:gravity="right"
         android:layout_marginTop="30dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.35"
         android:fontFamily="sans-serif-condensed"
         android:textSize="15sp"/>
     </LinearLayout>

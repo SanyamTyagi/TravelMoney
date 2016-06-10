@@ -71,17 +71,17 @@ public class HomeActivity extends AppCompatActivity {
     private void onCheckOut(Employee employee){
         employee.setCheckedIn(false);
         employee.setCheckOutTime(Calendar.getInstance().getTimeInMillis());
-        employee.setRemainingBalance((int)calculateBalance(employee));
+        employee.setRemainingBalance(calculateBalance(employee));
         EmployeeDataBase.travelersList.add(employee);
     }
 
     private double distanceTravelled(Employee employee){
-        return ((employee.getCheckOutTime()-employee.getCheckInTime())/3600000) * 60;
+        return (((double) (employee.getCheckOutTime()-employee.getCheckInTime()))/3600000) * 100;
     }
 
     //in peso
     private double calculateBalance(Employee employee){
-        return employee.getRemainingBalance() - distanceTravelled(employee) * 10;
+        return employee.getRemainingBalance() - (distanceTravelled(employee) * 10);
     }
 
 
@@ -120,10 +120,10 @@ public class HomeActivity extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                int id = Integer.parseInt(result.getContents());
+                String id = result.getContents();
                 Employee employee = null;
                 for(Employee employee1 : EmployeeDataBase.employeesList){
-                    if(employee1.getEmployeeID() == id){
+                    if(employee1.getEmployeeID().equals(id)){
                         employee = employee1;
                         break;
                     }
@@ -131,11 +131,11 @@ public class HomeActivity extends AppCompatActivity {
                 if(employee != null) {
                     if (employee.isCheckedIn()) {
                         onCheckOut(employee);
-                        listAdapter.addData(employee);
-                        listAdapter.notifyDataSetChanged();
                         Log.d("TAG", "onCheckout returned: " + employee.getName() + "   " + employee.getFormattedCheckInTime());
                     } else {
                         onCheckIn(employee);
+                        listAdapter.addData(employee);
+                        listAdapter.notifyDataSetChanged();
                         Log.d("TAG", "onCheckin() returned: " + employee.getName() + "   " + employee.getFormattedCheckOutTime());
                     }
                 }
