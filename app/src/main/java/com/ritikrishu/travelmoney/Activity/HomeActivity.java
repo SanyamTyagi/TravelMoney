@@ -90,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         integrator.setBeepEnabled(true);
         integrator.addExtra("PROMPT_MESSAGE", "Place Your QR Inside The Box.");
         integrator.setOrientationLocked(true);
-        integrator.setCaptureActivity(CaptureQr.class);
+        //integrator.setCaptureActivity(CaptureQr.class);
         integrator.initiateScan();
     }
 
