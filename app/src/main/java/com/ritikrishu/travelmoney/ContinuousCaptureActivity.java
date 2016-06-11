@@ -2,7 +2,6 @@ package com.ritikrishu.travelmoney;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +19,8 @@ import com.journeyapps.barcodescanner.CameraPreview;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.ViewfinderView;
+import com.ritikrishu.travelmoney.Model.Employee;
+import com.ritikrishu.travelmoney.View.TicketAlertDialog;
 
 import java.util.List;
 import java.util.Timer;
@@ -30,51 +31,7 @@ import java.util.TimerTask;
  * a barcode is scanned.
  */
 public class ContinuousCaptureActivity extends Activity {
-    private static final String TAG = "TAG" +
-            "";
-
     private DecoratedBarcodeView barcodeView;
-
-    private BarcodeCallback callback = new BarcodeCallback() {
-        @Override
-        public void barcodeResult(BarcodeResult result) {
-            if (result.getText() != null) {
-                Log.d(TAG, "barcodeResult() returned: *********" );
-                //call your method here .
-//                barcodeView.setStatusText(result.getText());
-                barcodeView.pause();
-                AlertDialog.Builder builder = new AlertDialog.Builder(ContinuousCaptureActivity.this);
-                builder.setTitle("Title");
-                builder.setMessage(result.getText());
-                builder.setCancelable(true);
-
-                final AlertDialog closedialog= builder.create();
-
-                closedialog.show();
-
-                final Timer timer2 = new Timer();
-                timer2.schedule(new TimerTask() {
-                    public void run() {
-                        closedialog.dismiss();
-                        timer2.cancel(); //this will cancel the timer of the system
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                barcodeView.resume();
-                            }
-                        });
-                    }
-                }, 2000);
-
-
-            }
-
-        }
-
-        @Override
-        public void possibleResultPoints(List<ResultPoint> resultPoints) {
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +39,7 @@ public class ContinuousCaptureActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.continuous_scan);
-
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
         barcodeView.setStatusText("");
@@ -94,14 +49,12 @@ public class ContinuousCaptureActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
         barcodeView.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         barcodeView.pause();
     }
 
@@ -123,16 +76,44 @@ public class ContinuousCaptureActivity extends Activity {
     }
 
     private int getFrontCameraId() {
-        int cameraId = -1;
         int numberOfCameras = Camera.getNumberOfCameras();
         for (int i = 0; i < numberOfCameras; i++) {
             Camera.CameraInfo info = new Camera.CameraInfo();
             Camera.getCameraInfo(i, info);
             if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                cameraId = i;
-                return cameraId;
+                return i;
             }
         }
         return -1;
     }
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if (result.getText() != null) {
+                barcodeView.pause();
+                Employee employee = Employee.getEmployeeByID(result.getText());
+                if (employee != null) {
+                    final TicketAlertDialog closedialog = new TicketAlertDialog(ContinuousCaptureActivity.this, ContinuousCaptureActivity.this, employee);
+                    closedialog.show();
+                    new Timer().schedule(new TimerTask() {
+                        public void run() {
+                            closedialog.dismiss();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    barcodeView.resume();
+                                }
+                            });
+                            this.cancel();
+                        }
+                    }, 6000);
+                }
+            }
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
 }

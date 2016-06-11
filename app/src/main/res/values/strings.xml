@@ -2,4 +2,10 @@
     <string name="app_name">Travel Money</string>
     <string name="scan">Scan</string>
     <string name="generate_sheet">Generate Sheet</string>
+    <string name="remaining_balance">"Remaining Balance: "</string>
+    <string name="welcome">"Welcome "</string>
+    <string name="trip_cost">"Trip cost: "</string>
+    <string name="peso">" peso"</string>
+    <string name="wait_30_seconds">please try checkout after 30 seconds...</string>
+    <string name="already_checkedin">Already CheckedIn!!!</string>
 </resources>
