@@ -45,7 +45,9 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 //                scanQRCode();
-                startActivity(new Intent(HomeActivity.this, ContinuousCaptureActivity.class));
+                Intent intent = new Intent(HomeActivity.this,ContinuousCaptureActivity.class);
+
+                startActivity(intent);
 
             }
         });

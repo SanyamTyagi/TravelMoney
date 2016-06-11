@@ -6,16 +6,18 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CameraPreview;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.ritikrishu.travelmoney.Model.Employee;
-import com.ritikrishu.travelmoney.Model.EmployeeDataBase;
-import com.ritikrishu.travelmoney.View.TicketAlertDialog;
+import com.journeyapps.barcodescanner.Size;
+import com.journeyapps.barcodescanner.ViewfinderView;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,12 +34,15 @@ public class ContinuousCaptureActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.continuous_scan);
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
         barcodeView.setStatusText("");
-
+        barcodeView.initializeFromIntent(new Intent().putExtra("SCAN_CAMERA_ID", getFrontCameraId()));
     }
 
     @Override
