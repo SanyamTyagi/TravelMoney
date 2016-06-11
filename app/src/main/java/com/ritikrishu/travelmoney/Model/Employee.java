@@ -88,4 +88,41 @@ public class Employee {
     public void setRemainingBalance(double remainingBalance) {
         RemainingBalance = remainingBalance;
     }
+
+    //--helper methods
+
+    public static void onCheckIn(Employee employee) {
+        employee.setCheckedIn(true);
+        employee.setCheckInTime(Calendar.getInstance().getTimeInMillis());
+    }
+
+    public static void onCheckOut(Employee employee) {
+        employee.setCheckedIn(false);
+        employee.setCheckOutTime(Calendar.getInstance().getTimeInMillis());
+        employee.setRemainingBalance(calculateBalance(employee));
+        EmployeeDataBase.travelersList.add(employee);
+    }
+
+    public static double distanceTravelled(Employee employee){
+        return (((double) (employee.getCheckOutTime()-employee.getCheckInTime()))/3600000) * 100;
+    }
+
+    //in peso
+    public static double calculateBalance(Employee employee){
+        return employee.getRemainingBalance() - (distanceTravelled(employee) * 10);
+    }
+
+    public static String getTripCost(Employee employee){
+        DecimalFormat f = new DecimalFormat("##.##");
+        return f.format(distanceTravelled(employee) * 10);
+    }
+
+    public static Employee getEmployeeByID(String employeeID){
+        for(Employee employee : EmployeeDataBase.employeesList){
+            if(employee.getEmployeeID().equals(employeeID)){
+                return employee;
+            }
+        }
+        return null;
+    }
 }

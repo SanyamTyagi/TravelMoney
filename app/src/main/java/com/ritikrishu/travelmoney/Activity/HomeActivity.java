@@ -59,87 +59,68 @@ public class HomeActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(listAdapter);
     }
 
-    private void onCheckIn(Employee employee) {
-        employee.setCheckedIn(true);
-        employee.setCheckInTime(Calendar.getInstance().getTimeInMillis());
-    }
-
-    private void onCheckOut(Employee employee) {
-        employee.setCheckedIn(false);
-        employee.setCheckOutTime(Calendar.getInstance().getTimeInMillis());
-        employee.setRemainingBalance(calculateBalance(employee));
-        EmployeeDataBase.travelersList.add(employee);
-    }
-
-    private double distanceTravelled(Employee employee){
-        return (((double) (employee.getCheckOutTime()-employee.getCheckInTime()))/3600000) * 100;
-    }
-
-    //in peso
-    private double calculateBalance(Employee employee){
-        return employee.getRemainingBalance() - (distanceTravelled(employee) * 10);
-    }
 
 
 
 
 
-    void scanQRCode() {
-        IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
-        integrator.addExtra("SCAN_CAMERA_ID", getFrontCameraId());
-        integrator.setBeepEnabled(true);
-        integrator.addExtra("PROMPT_MESSAGE", "Place Your QR Inside The Box.");
-        integrator.setOrientationLocked(true);
-        //integrator.setCaptureActivity(CaptureQr.class);
-        integrator.initiateScan();
-    }
 
-    private int getFrontCameraId() {
-        int cameraId = -1;
-        int numberOfCameras = Camera.getNumberOfCameras();
-        for (int i = 0; i < numberOfCameras; i++) {
-            Camera.CameraInfo info = new Camera.CameraInfo();
-            Camera.getCameraInfo(i, info);
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                cameraId = i;
-                return cameraId;
-            }
-        }
-        return -1;
-    }
-
-
-    //on ActivityResult method
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                String id = result.getContents();
-                Employee employee = null;
-                for(Employee employee1 : EmployeeDataBase.employeesList){
-                    if(employee1.getEmployeeID().equals(id)){
-                        employee = employee1;
-                        break;
-                    }
-                }
-                if(employee != null) {
-                    if (employee.isCheckedIn()) {
-                        onCheckOut(employee);
-                        Log.d("TAG", "onCheckout returned: " + employee.getName() + "   " + employee.getFormattedCheckInTime());
-                    } else {
-                        onCheckIn(employee);
-                        listAdapter.addData(employee);
-                        listAdapter.notifyDataSetChanged();
-                        Log.d("TAG", "onCheckin() returned: " + employee.getName() + "   " + employee.getFormattedCheckOutTime());
-                    }
-                }
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, intent);
-        }
-    }
+//    void scanQRCode() {
+//        IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
+//        integrator.addExtra("SCAN_CAMERA_ID", getFrontCameraId());
+//        integrator.setBeepEnabled(true);
+//        integrator.addExtra("PROMPT_MESSAGE", "Place Your QR Inside The Box.");
+//        integrator.setOrientationLocked(true);
+//        //integrator.setCaptureActivity(CaptureQr.class);
+//        integrator.initiateScan();
+//    }
+//
+//    private int getFrontCameraId() {
+//        int cameraId = -1;
+//        int numberOfCameras = Camera.getNumberOfCameras();
+//        for (int i = 0; i < numberOfCameras; i++) {
+//            Camera.CameraInfo info = new Camera.CameraInfo();
+//            Camera.getCameraInfo(i, info);
+//            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+//                cameraId = i;
+//                return cameraId;
+//            }
+//        }
+//        return -1;
+//    }
+//
+//
+//    //on ActivityResult method
+//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+//        if (result != null) {
+//            if (result.getContents() == null) {
+//                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+//            } else {
+//                String id = result.getContents();
+//                Employee employee = null;
+//                for(Employee employee1 : EmployeeDataBase.employeesList){
+//                    if(employee1.getEmployeeID().equals(id)){
+//                        employee = employee1;
+//                        break;
+//                    }
+//                }
+//                if(employee != null) {
+//                    if (employee.isCheckedIn()) {
+//                        onCheckOut(employee);
+//                        Log.d("TAG", "onCheckout returned: " + employee.getName() + "   " + employee.getFormattedCheckInTime());
+//                    } else {
+//                        onCheckIn(employee);
+//                        listAdapter.addData(employee);
+//                        listAdapter.notifyDataSetChanged();
+//                        Log.d("TAG", "onCheckin() returned: " + employee.getName() + "   " + employee.getFormattedCheckOutTime());
+//                    }
+//                }
+//            }
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, intent);
+//        }
+//    }
 
 
 }
