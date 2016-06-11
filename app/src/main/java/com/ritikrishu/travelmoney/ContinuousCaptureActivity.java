@@ -1,6 +1,8 @@
 package com.ritikrishu.travelmoney;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -17,6 +19,8 @@ import com.journeyapps.barcodescanner.CameraPreview;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.ViewfinderView;
+import com.ritikrishu.travelmoney.Model.Employee;
+import com.ritikrishu.travelmoney.View.TicketAlertDialog;
 
 import java.util.List;
 import java.util.Timer;
@@ -27,10 +31,7 @@ import java.util.TimerTask;
  * a barcode is scanned.
  */
 public class ContinuousCaptureActivity extends Activity {
-    private static final String TAG = "TAG";
     private DecoratedBarcodeView barcodeView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,35 +75,41 @@ public class ContinuousCaptureActivity extends Activity {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
-
+    private int getFrontCameraId() {
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if (result.getText() != null) {
-                Log.d(TAG, "barcodeResult() returned: *********" );
                 barcodeView.pause();
                 Employee employee = Employee.getEmployeeByID(result.getText());
-                if(employee != null) {
-                    final TicketAlertDialog closedialog = new TicketAlertDialog(ContinuousCaptureActivity.this, ContinuousCaptureActivity.this,employee);
+                if (employee != null) {
+                    final TicketAlertDialog closedialog = new TicketAlertDialog(ContinuousCaptureActivity.this, ContinuousCaptureActivity.this, employee);
                     closedialog.show();
-                    final Timer timer2 = new Timer();
-                    timer2.schedule(new TimerTask() {
+                    new Timer().schedule(new TimerTask() {
                         public void run() {
                             closedialog.dismiss();
-                            timer2.cancel(); //this will cancel the timer of the system
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     barcodeView.resume();
                                 }
                             });
+                            this.cancel();
                         }
                     }, 6000);
                 }
-
             }
-
         }
 
         @Override
